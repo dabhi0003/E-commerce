@@ -1,0 +1,49 @@
+{% comment %} <h2>Your Bill is {{total_bill}} </h2>
+<form action="{% url 'charge' %}" method="post">
+    {% csrf_token %}
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="{{ key }}"
+        data-description="Payment Gateway"
+        data-amount={{ total_bill|stringformat:'d' }}
+        data-currency="inr"
+        data-locale="auto">
+    </script>
+</form> {% endcomment %}
+
+<h2>Your Cart Is</h2>
+
+
+{% for cart_item in cart_items %}
+<h3>Product: {{ cart_item.product.name }}</h3>
+<p>Quantity: {{ cart_item.product_quantity }}</p>
+<p>Total Bill: {{ cart_item.total_bill }}</p>
+<form action="{% url 'charge' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ cart_item.product.id }}">
+    <input type="hidden" name="quantity" value="{{ cart_item.product_quantity }}">
+    <input type="hidden" name="total_bill" value="{{ cart_item.total_bill }}">
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="{{ key }}"
+    data-description="{{ cart_item.product.name }}"
+    data-amount={{ cart_item.total_bill|stringformat:'d' }}
+    data-currency="inr"
+    data-locale="auto">
+</script>
+    </form>
+{% endfor %}
+
+<h2>Your All Products Bill is {{ total_bill }}</h2>
+<h4>Buy All The Product</h4>
+<form id="buy-all-form" action="{% url 'charge_all' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="cart_id" value="{{ cart.id }}">
+    <input type="hidden" name="total_bill" value="{{ total_bill }}">
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="{{ key }}"
+    data-amount="{{ total_bill|stringformat:'d' }}"
+    data-currency="inr"
+    data-locale="auto">
+</script>
+</form>
+
+
