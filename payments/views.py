@@ -422,8 +422,6 @@ def ChargeView(request):
 def Charge_allView(request):
     if request.method == "POST":
         cart_id = 73
-        total_bill = int(request.POST.get("total_bill"))
-        new_bill = int(total_bill / 2)
         cart_items = CartItem.objects.filter(cart=cart_id)
         admin_total = 0
 
